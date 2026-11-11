@@ -1,13 +1,18 @@
 #ifndef BANKER_H
 #define BANKER_H
 
+#include <stdio.h> // need to FILE *
+
 typedef struct {
-  int customers;   // Clients quantitative
-  int resources;   // Amount of resources we have.
-  int *available;  // Disponible amount of every type
-  int *maximum;    // Limit of every client
-  int *allocation; // Resources that each client has already recieved.
-  int *need;       // Resources that each client might need
+  int customers;   // number of customers (rows)
+  int resources;   // number of resource types (columns)
+  int *available;  // [resources] free instances of each resource
+  int *maximum;    // [customers][resources] maximum demand of each customer
+  int *allocation; // [customers][resources] resources each customer holds now
+  int *need;       // [customers][resources] maximum - allocation} Bank;
 } Bank;
+
+int bank_init(Bank *bank, int customers, int resources, const int *total,
+              const int *maximum);
 
 #endif
