@@ -1,8 +1,6 @@
 #ifndef BANKER_H
 #define BANKER_H
 
-#include <stdio.h> // need to FILE *
-
 typedef struct {
   int customers;   // number of customers (rows)
   int resources;   // number of resource types (columns)
@@ -14,5 +12,7 @@ typedef struct {
 
 int bank_init(Bank *bank, int customers, int resources, const int *total,
               const int *maximum);
+
+void bank_free(Bank *bank);
 
 #endif

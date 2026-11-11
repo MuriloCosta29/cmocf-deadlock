@@ -19,10 +19,7 @@ int bank_init(Bank *bank, int customers, int resources, const int *total,
 
   // Free memo if fail
   if (!bank->available || !bank->maximum || !bank->allocation || !bank->need) {
-    free(bank->available);
-    free(bank->maximum);
-    free(bank->allocation);
-    free(bank->need);
+    bank_free(bank);
     return -1;
   }
 
@@ -31,4 +28,11 @@ int bank_init(Bank *bank, int customers, int resources, const int *total,
   memcpy(bank->maximum, maximum, cells * sizeof(int));
   memcpy(bank->need, maximum, cells * sizeof(int));
   return 0;
+}
+
+void bank_free(Bank *bank) {
+  free(bank->available);
+  free(bank->maximum);
+  free(bank->allocation);
+  free(bank->need);
 }
