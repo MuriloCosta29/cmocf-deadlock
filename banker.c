@@ -36,3 +36,51 @@ void bank_free(Bank *bank) {
   free(bank->allocation);
   free(bank->need);
 }
+
+int bank_is_safe(const Bank *bank) {
+  int *work = malloc(bank->resources * sizeof(int));
+  int *finish = calloc(bank->customers, sizeof(int));
+  if (!work || !finish) {
+    free(work);
+    free(finish);
+    return 0;
+  }
+  memcpy(work, bank->available, bank->resources * sizeof(int));
+
+  // search loop
+  int progress = 1;
+  while (progress) {
+    progress = 0;
+    for (int i = 0; i < bank->customers; i++) {
+      if (finish[i])
+        continue;
+
+      int can_finish = 1;
+      for (int j = 0; j < bank->resources; j++) {
+        if (bank->need[i * bank->resources + j] > work[j]) {
+          can_finish = 0;
+          break;
+        }
+      }
+
+      if (can_finish) {
+        for (int j = 0; j < bank->resources; j++)
+          work[j] += bank->allocation[i * bank->resources + j];
+        finish[i] = 1;
+        progress = 1;
+      }
+    }
+  }
+
+  // verification
+  int safe = 1;
+  for (int i = 0; i < bank->customers; i++) {
+    if (!finish[i]) {
+      safe = 0;
+      break;
+    }
+  }
+  free(work);
+  free(finish);
+  return safe;
+}
