@@ -83,3 +83,33 @@ int bank_is_safe(const Bank *bank) {
   free(finish);
   return safe;
 }
+
+RequestStatus bank_request(Bank *bank, int customer, const int *request) {
+  int row = customer * bank->resources; // where this customer's row starts
+
+  for (int j = 0; j < bank->resources; j++) {
+    if (request[j] > bank->need[row + j])
+      return REQ_EXCEEDS_MAXIMUM;
+  }
+
+  for (int j = 0; j < bank->resources; j++) {
+    if (request[j] > bank->available[j])
+      return REQ_NOT_ENOUGH;
+  }
+
+  for (int j = 0; j < bank->resources; j++) {
+    bank->available[j] -= request[j];
+    bank->allocation[row + j] += request[j];
+    bank->need[row + j] -= request[j];
+  }
+
+  if (bank_is_safe(bank))
+    return REQ_GRANTED;
+
+  for (int j = 0; j < bank->resources; j++) {
+    bank->available[j] += request[j];
+    bank->allocation[row + j] -= request[j];
+    bank->need[row + j] += request[j];
+  }
+  return REQ_UNSAFE;
+}
