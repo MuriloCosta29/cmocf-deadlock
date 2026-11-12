@@ -113,3 +113,19 @@ RequestStatus bank_request(Bank *bank, int customer, const int *request) {
   }
   return REQ_UNSAFE;
 }
+
+ReleaseStatus bank_release(Bank *bank, int customer, const int *release) {
+  int row = customer * bank->resources;
+
+  for (int j = 0; j < bank->resources; j++) {
+    if (release[j] > bank->allocation[row + j])
+      return REL_EXCEEDS_ALLOCATION;
+  }
+
+  for (int j = 0; j < bank->resources; j++) {
+    bank->available[j] += release[j];
+    bank->allocation[row + j] -= release[j];
+    bank->need[row + j] += release[j];
+  }
+  return REL_OK;
+}

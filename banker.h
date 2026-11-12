@@ -29,4 +29,11 @@ typedef enum {
 
 RequestStatus bank_request(Bank *bank, int customer, const int *request);
 
+typedef enum {
+  REL_OK,
+  REL_EXCEEDS_ALLOCATION,
+} ReleaseStatus;
+
+ReleaseStatus bank_release(Bank *bank, int customer, const int *release);
+
 #endif
