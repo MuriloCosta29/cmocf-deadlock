@@ -36,4 +36,6 @@ typedef enum {
 
 ReleaseStatus bank_release(Bank *bank, int customer, const int *release);
 
+void bank_print(const Bank *bank, FILE *out);
+
 #endif
