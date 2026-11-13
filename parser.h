@@ -18,7 +18,9 @@ int parse_customers(const char *path, int *customers, int *resources,
                     int **maximum);
 
 // reads the next line of commands.txt into cmd and values[resources].
+// the customer must be in [0, customers).
 // returns 1 = got a command | 0 = end of file | -1 = bad line.
-int parse_command(FILE *file, int resources, Command *cmd, int *values);
+int parse_command(FILE *file, int customers, int resources, Command *cmd,
+                  int *values);
 
 #endif

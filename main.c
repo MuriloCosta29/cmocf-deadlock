@@ -43,13 +43,38 @@ int main(int argc, char *argv[]) {
   }
 
   FILE *commands = fopen("commands.txt", "r");
+  if (!commands) {
+    fprintf(stderr, "error: cannot open commands.txt\n");
+    bank_free(&bank);
+    free(maximum);
+    free(total);
+    free(values);
+    return 1;
+  }
+
+  // validate every command before running any (nothing is written on error)
+  Command cmd;
+  int status;
+  int number = 0; // which command we are checking, for the error message
+  while ((status = parse_command(commands, customers, resources, &cmd,
+                                 values)) == 1)
+    number++;
+  if (status < 0) {
+    fprintf(stderr, "error: invalid command %d in commands.txt\n", number + 1);
+    fclose(commands);
+    bank_free(&bank);
+    free(maximum);
+    free(total);
+    free(values);
+    return 1;
+  }
+
+  // all commands are valid: read the file again and run them
+  rewind(commands);
   FILE *out = fopen("result.txt", "w");
-  if (!commands || !out) {
-    fprintf(stderr, "error: cannot open commands.txt or result.txt\n");
-    if (commands)
-      fclose(commands);
-    if (out)
-      fclose(out);
+  if (!out) {
+    fprintf(stderr, "error: cannot open result.txt\n");
+    fclose(commands);
     bank_free(&bank);
     free(maximum);
     free(total);
@@ -58,9 +83,7 @@ int main(int argc, char *argv[]) {
   }
 
   // one command per iteration, in file order
-  Command cmd;
-  int status;
-  while ((status = parse_command(commands, resources, &cmd, values)) == 1) {
+  while (parse_command(commands, customers, resources, &cmd, values) == 1) {
     if (cmd.type == CMD_PRINT) {
       bank_print(&bank, out);
 
@@ -98,14 +121,11 @@ int main(int argc, char *argv[]) {
     }
   }
 
-  if (status < 0)
-    fprintf(stderr, "error: bad line in commands.txt\n");
-
   fclose(commands);
   fclose(out);
   bank_free(&bank);
   free(maximum);
   free(total);
   free(values);
-  return status < 0 ? 1 : 0;
+  return 0;
 }

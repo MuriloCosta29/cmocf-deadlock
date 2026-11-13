@@ -59,7 +59,8 @@ int parse_customers(const char *path, int *customers, int *resources,
   return 0;
 }
 
-int parse_command(FILE *file, int resources, Command *cmd, int *values) {
+int parse_command(FILE *file, int customers, int resources, Command *cmd,
+                  int *values) {
   char line[256];
 
   // read the next non-blank line
@@ -79,6 +80,10 @@ int parse_command(FILE *file, int resources, Command *cmd, int *values) {
   int customer;
   int used; // chars read so far, to continue from there
   if (sscanf(line, "%2s %d%n", op, &customer, &used) != 2)
+    return -1;
+
+  // customer index must exist, or the bank would read outside its matrices
+  if (customer < 0 || customer >= customers)
     return -1;
 
   if (strcmp(op, "RQ") == 0)
