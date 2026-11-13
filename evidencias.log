@@ -79,3 +79,119 @@ exit
 
 Command exit status: 0
 Script done on Fri Nov 13 11:30:42 2026
+Fri Nov 13 16:43:33 -03 2026
+murilo
+/Users/murilo/dev/college/infra-so/cmocf-deadlock
+Script started on Fri Nov 13 16:43:33 2026
+Command: bash
+
+The default interactive shell is now zsh.
+To update your account to use zsh, please run `chsh -s /bin/zsh`.
+For more details, please visit https://support.apple.com/kb/HT208050.
+[?1034hbash-3.2$ make
+make: `banker' is up to date.
+bash-3.2$ clear[K[K[K[K[Kclear
+[3J[H[2Jbash-3.2$ mae[K[K[K./banker 
+error: expected 3 resource arguments, got 0
+bash-3.2$ exit[K[K[K[K./name[K[K[K[Kbanker ab[K b c
+bash-3.2$ clear
+[3J[H[2Jbash-3.2$ b[K./banker 10 5 7
+bash-3.2$ ls
+banker			customer.txt		Makefile		README.md
+banker.c		evidencias.log		notes			result.txt
+banker.h		evidencias.sh		parser.c		tratamento-erros.txt
+banker.o		main.c			parser.h
+commands.txt		main.o			parser.o
+bash-3.2$ ca [Kt result.txt 
+Allocate to customer 0 the resources 0 2 1
+Allocate to customer 2 the resources 3 0 2
+Allocate to customer 1 the resources 2 0 0
+Allocate to customer 4 the resources 0 0 2
+Release from customer 0 the resources 0 1 1
+Allocate to customer 3 the resources 2 1 1
+MAXIMUM   |   ALLOCATION  |   NEED
+7 5 3     |   0 1 0       |   7 4 3 
+3 2 2     |   2 0 0       |   1 2 2 
+9 0 2     |   3 0 2       |   6 0 0 
+2 2 2     |   2 1 1       |   0 1 1 
+4 3 3     |   0 0 2       |   4 3 1 
+AVAILABLE 3 3 2 
+The resources 3 3 2 are not enough to customer 4 request 4 0 0 
+Allocate to customer 1 the resources 1 0 2
+The customer 0 request 0 2 0 was denied because result in an unsafe state
+The customer 2 request 0 1 0 was denied because exceed its maximum allocation
+bash-3.2$ rm -rf result.txt 
+bash-3.2$ clear
+[3J[H[2Jbash-3.2$ ./banker 0[K10 5 8[K7
+bash-3.2$ ls
+banker			customer.txt		Makefile		README.md
+banker.c		evidencias.log		notes			result.txt
+banker.h		evidencias.sh		parser.c		tratamento-erros.txt
+banker.o		main.c			parser.h
+commands.txt		main.o			parser.o
+bash-3.2$ cat result.txt 
+Allocate to customer 0 the resources 0 2 1
+Allocate to customer 2 the resources 3 0 2
+Allocate to customer 1 the resources 2 0 0
+Allocate to customer 4 the resources 0 0 2
+Release from customer 0 the resources 0 1 1
+Allocate to customer 3 the resources 2 1 1
+MAXIMUM   |   ALLOCATION  |   NEED
+7 5 3     |   0 1 0       |   7 4 3 
+3 2 2     |   2 0 0       |   1 2 2 
+9 0 2     |   3 0 2       |   6 0 0 
+2 2 2     |   2 1 1       |   0 1 1 
+4 3 3     |   0 0 2       |   4 3 1 
+AVAILABLE 3 3 2 
+The resources 3 3 2 are not enough to customer 4 request 4 0 0 
+Allocate to customer 1 the resources 1 0 2
+The customer 0 request 0 2 0 was denied because result in an unsafe state
+The customer 2 request 0 1 0 was denied because exceed its maximum allocation
+bash-3.2$ make cela[K[K[Klena[K[Kan[K[K[K[K[K[K[K[K[K[Krm -rf result.txt 
+bash-3.2$ clear
+[3J[H[2Jbash-3.2$ ls
+banker			customer.txt		Makefile		README.md
+banker.c		evidencias.log		notes			tratamento-erros.txt
+banker.h		evidencias.sh		parser.c
+banker.o		main.c			parser.h
+commands.txt		main.o			parser.o
+bash-3.2$ ./banker --[K[K0 0 0
+bash-3.2$ clear
+[3J[H[2Jbash-3.2$ l
+bash: l: command not found
+bash-3.2$ clear
+[3J[H[2Jbash-3.2$ ls
+banker			customer.txt		Makefile		README.md
+banker.c		evidencias.log		notes			result.txt
+banker.h		evidencias.sh		parser.c		tratamento-erros.txt
+banker.o		main.c			parser.h
+commands.txt		main.o			parser.o
+bash-3.2$ catr[K result.txt 
+The resources 0 0 0 are not enough to customer 0 request 0 2 1 
+The resources 0 0 0 are not enough to customer 2 request 3 0 2 
+The resources 0 0 0 are not enough to customer 1 request 2 0 0 
+The resources 0 0 0 are not enough to customer 4 request 0 0 2 
+The customer 0 release 0 1 1 was denied because exceed its allocation
+The resources 0 0 0 are not enough to customer 3 request 2 1 1 
+MAXIMUM   |   ALLOCATION  |   NEED
+7 5 3     |   0 0 0       |   7 5 3 
+3 2 2     |   0 0 0       |   3 2 2 
+9 0 2     |   0 0 0       |   9 0 2 
+2 2 2     |   0 0 0       |   2 2 2 
+4 3 3     |   0 0 0       |   4 3 3 
+AVAILABLE 0 0 0 
+The resources 0 0 0 are not enough to customer 4 request 4 0 0 
+The resources 0 0 0 are not enough to customer 1 request 1 0 2 
+The resources 0 0 0 are not enough to customer 0 request 0 2 0 
+The customer 2 request 0 1 0 was denied because exceed its maximum allocation
+bash-3.2$ clear
+[3J[H[2Jbash-3.2$ e[Kexit[K[K[K[Kmake celan
+make: *** No rule to make target `celan'.  Stop.
+bash-3.2$ cl[K[Kmake clean
+rm -f main.o banker.o parser.o banker
+bash-3.2$ clear
+[3J[H[2Jbash-3.2$ exit
+exit
+
+Command exit status: 0
+Script done on Fri Nov 13 16:45:24 2026
