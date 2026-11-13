@@ -64,3 +64,18 @@ exit
 
 Command exit status: 0
 Script done on Thu Nov 12 19:12:14 2026
+Fri Nov 13 11:30:39 -03 2026
+murilo
+/Users/murilo/dev/college/infra-so/cmocf-deadlock
+Script started on Fri Nov 13 11:30:39 2026
+Command: bash
+
+The default interactive shell is now zsh.
+To update your account to use zsh, please run `chsh -s /bin/zsh`.
+For more details, please visit https://support.apple.com/kb/HT208050.
+[?1034hbash-3.2$ cc -Wall -Wextra -c banker.c -o /dev/null
+bash-3.2$ exit
+exit
+
+Command exit status: 0
+Script done on Fri Nov 13 11:30:42 2026
