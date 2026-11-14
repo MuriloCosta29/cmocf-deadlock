@@ -195,3 +195,129 @@ exit
 
 Command exit status: 0
 Script done on Fri Nov 13 16:45:24 2026
+Sat Nov 14 11:05:41 -03 2026
+murilo
+/Users/murilo/dev/college/infra-so/cmocf-deadlock
+Script started on Sat Nov 14 11:05:41 2026
+Command: bash
+
+The default interactive shell is now zsh.
+To update your account to use zsh, please run `chsh -s /bin/zsh`.
+For more details, please visit https://support.apple.com/kb/HT208050.
+[?1034hbash-3.2$ ls cat v[Kcustomer.txt 
+ls: cat: No such file or directory
+customer.txt
+bash-3.2$ clear
+[3J[H[2Jbash-3.2$ ls
+banker		banker.o	evidencias.log	main.o		parser.c	README.md
+banker.c	commands.txt	evidencias.sh	Makefile	parser.h	result.txt
+banker.h	customer.txt	main.c		notes		parser.o
+bash-3.2$ cat customer.txt 
+7,5,3
+3,2,2
+9,0,2
+2,2,2
+4,3,3bash-3.2$ cat come[Kmands.txt 
+RQ 0 0 2 1
+RQ 2 3 0 2
+RQ 1 2 0 0
+RQ 4 0 0 2
+RL 0 0 1 1
+RQ 3 2 1 1
+*
+RQ 4 4 0 0
+RQ 1 1 0 2
+RQ 0 0 2 0
+RQ 2 0 1 0bash-3.2$ make clean
+rm -f main.o banker.o parser.o banker
+bash-3.2$ make 
+gcc -Wall -Wextra -std=c99 -c main.c -o main.o
+gcc -Wall -Wextra -std=c99 -c banker.c -o banker.o
+gcc -Wall -Wextra -std=c99 -c parser.c -o parser.o
+gcc -Wall -Wextra -std=c99 -o banker main.o banker.o parser.o
+bash-3.2$ ./ [Kbanker 10 5 7
+bash-3.2$ cat result.txt 
+Allocate to customer 0 the resources 0 2 1
+Allocate to customer 2 the resources 3 0 2
+Allocate to customer 1 the resources 2 0 0
+Allocate to customer 4 the resources 0 0 2
+Release from customer 0 the resources 0 1 1
+Allocate to customer 3 the resources 2 1 1
+MAXIMUM   |   ALLOCATION  |   NEED
+7 5 3     |   0 1 0       |   7 4 3 
+3 2 2     |   2 0 0       |   1 2 2 
+9 0 2     |   3 0 2       |   6 0 0 
+2 2 2     |   2 1 1       |   0 1 1 
+4 3 3     |   0 0 2       |   4 3 1 
+AVAILABLE 3 3 2 
+The resources 3 3 2 are not enough to customer 4 request 4 0 0 
+Allocate to customer 1 the resources 1 0 2
+The customer 0 request 0 2 0 was denied because result in an unsafe state
+The customer 2 request 0 1 0 was denied because exceed its maximum allocation
+bash-3.2$ cat [K[K[K[Kdiff result [K.txt /tmp/resut[Klt.professor.txt [K
+bash-3.2$ make [K
+make: `banker' is up to date.
+bash-3.2$ mkdir /tpm[K[Kmp/ [Kt **[K[K&& dif[K[Kc[K[Kcp banker customer [K.txt commands.txt /tmp/t **[K[K k[K&[K[K&& cd /tmp [K/t
+bash-3.2$ ./[K[Kpwd
+/tmp/t
+bash-3.2$ ./bn[Kanker [K 10 5
+error: expected 3 resource arguments, got 2
+bash-3.2$ ./ [Kbanker 10 5 8 1[K[K[K7 1
+error: expected 3 resource arguments, got 4
+bash-3.2$ ./ [Kbanker ac[K b c
+error: 'a' is not a valid number of instances
+bash-3.2$ ./banker 10 -5 7
+error: '-5' is not a valid number of instances
+bash-3.2$ echo *[K&[K*[K&[K#[K@1[K[K$1
+
+bash-3.2$ echo $1[K?
+0
+bash-3.2$ echo 0 = correto e 1 = deu [K[K[K[Kbhico [K[K[K[K[Kicho vitin [K[K[K[K[K[K[K[K[K[K[K[K[K deu ruim [K
+0 = correto e 1 = deu ruim
+bash-3.2$ echo "7,5,3 [K" > customer [K.txt **[K[K&& echo "3.[K,2 [K" >> customer.txt 
+bash-3.2$ cat customer.txt 
+7,5,3
+3,2
+bash-3.2$ ./banker 10 5 7
+error: customer.txt has an invalid format: one customer per line, same amount of numbers (>= 0) separated by commas
+bash-3.2$ echo "7,x,3" > customer.txt
+bash-3.2$ ./banekr [K[K[K[Kker 10 5 7
+error: customer.txt has an invalid format: one customer per line, same amount of numbers (>= 0) separated by commas
+bash-3.2$ rm customer.txt 
+bash-3.2$ ./banker 10 5 7
+error: cannot open customer.txt
+bash-3.2$ echo *[K$ [K? 
+1
+bash-3.2$ cp ~/dev/college/infra-so/cmocf-deadlock/customer.txt .
+bash-3.2$ echo "RQ 9 0 0 0 1[K[K[K1" > commands.txt
+bash-3.2$ ./banker 10 5 8[K7
+error: invalid command 1 in commands.txt
+bash-3.2$ echo "RQ 0 -1 0 0 [K" > commands.txt
+bash-3.2$ echo "RQ 000[K[K 0 0 [K" > commands.txt [K
+bash-3.2$ ./abnker [K[K[K[K[K[K[Kbanker 10 5 8[K7
+error: invalid command 1 in commands.txt
+bash-3.2$ echo "XX 0 0 0 0 [K [K" > commands.txt
+bash-3.2$ ./banker 10 5 7
+error: invalid command 1 in commands.txt
+bash-3.2$ clear
+[3J[H[2Jbash-3.2$ rm commadn[K[Knds [K.txt [K
+bash-3.2$ ./banker 10 5 78[K
+error: cannot open commands.txt
+bash-3.2$ echo *[K&[K$?
+1
+bash-3.2$ cd ~/dve[K[Kev/cole[Klege//[Kinfra-so/dea[K[K[Kcmocf-deadlock
+bash-3.2$ exit[K[K[K[Kgit status [K
+On branch master
+Your branch is up to date with 'origin/master'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	[31mmodified:   evidencias.log[m
+
+no changes added to commit (use "git add" and/or "git commit -a")
+bash-3.2$ exit
+exit
+
+Command exit status: 0
+Script done on Sat Nov 14 11:11:31 2026
