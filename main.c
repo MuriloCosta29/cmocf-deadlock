@@ -1,7 +1,23 @@
 #include "banker.h"
 #include "parser.h"
+#include <errno.h>
+#include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+// converts a command-line argument to a number of instances (>= 0).
+// returns 0 = ok | -1 = not a valid number
+static int parse_instances(const char *arg, int *value) {
+  char *end; // strtol stops here: if it isn't the end of arg, there was junk
+  errno = 0;
+  long number = strtol(arg, &end, 10);
+  if (end == arg || *end != '\0') // no digits at all, or "12abc"
+    return -1;
+  if (errno == ERANGE || number < 0 || number > INT_MAX) // too big or negative
+    return -1;
+  *value = (int)number;
+  return 0;
+}
 
 // prints "a b c" (no trailing space)
 static void print_values(FILE *out, const int *values, int n) {
@@ -29,12 +45,28 @@ int main(int argc, char *argv[]) {
   int *total = malloc(resources * sizeof(int));
   int *values =
       malloc(resources * sizeof(int)); // values of the current command
-  for (int j = 0; j < resources; j++)
-    total[j] = atoi(argv[j + 1]);
+  if (!total || !values) {
+    fprintf(stderr, "error: out of memory\n");
+    free(maximum);
+    free(total);
+    free(values);
+    return 1;
+  }
+
+  // every argument must be a valid number
+  for (int j = 0; j < resources; j++) {
+    if (parse_instances(argv[j + 1], &total[j]) != 0) {
+      fprintf(stderr, "error: '%s' is not a valid number of instances\n",
+              argv[j + 1]);
+      free(maximum);
+      free(total);
+      free(values);
+      return 1;
+    }
+  }
 
   Bank bank;
-  if (!total || !values ||
-      bank_init(&bank, customers, resources, total, maximum) != 0) {
+  if (bank_init(&bank, customers, resources, total, maximum) != 0) {
     fprintf(stderr, "error: out of memory\n");
     free(maximum);
     free(total);
@@ -56,8 +88,8 @@ int main(int argc, char *argv[]) {
   Command cmd;
   int status;
   int number = 0; // which command we are checking, for the error message
-  while ((status = parse_command(commands, customers, resources, &cmd,
-                                 values)) == 1)
+  while ((status =
+              parse_command(commands, customers, resources, &cmd, values)) == 1)
     number++;
   if (status < 0) {
     fprintf(stderr, "error: invalid command %d in commands.txt\n", number + 1);
