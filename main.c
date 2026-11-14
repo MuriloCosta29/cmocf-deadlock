@@ -29,8 +29,15 @@ int main(int argc, char *argv[]) {
   // customer.txt first: it tells how many resources the arguments must have
   int customers, resources;
   int *maximum;
-  if (parse_customers("customer.txt", &customers, &resources, &maximum) != 0) {
-    fprintf(stderr, "error: cannot read customer.txt\n");
+  int load = parse_customers("customer.txt", &customers, &resources, &maximum);
+  if (load == -1) {
+    fprintf(stderr, "error: cannot open customer.txt\n");
+    return 1;
+  }
+  if (load == -2) {
+    fprintf(stderr, "error: customer.txt has an invalid format: one customer "
+                    "per line, same amount of numbers (>= 0) separated by "
+                    "commas\n");
     return 1;
   }
 
