@@ -1,0 +1,5 @@
+1. Cliente fora do intervalo (RQ 9 ... com 5 clientes): hoje lê fora da matriz, o que é um crash em potencial.
+2. Argumentos não numéricos (./banker a b c): hoje o atoi devolve 0 em silêncio.
+3. Formato do customer.txt: linhas com quantidades diferentes de valores, ou texto no lugar de número.
+4. Formato do commands.txt: comando desconhecido, valores faltando ou sobrando.
+5. Mensagens coerentes para arquivo ausente ou ilegível, que o PDF pede explicitamente.
