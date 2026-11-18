@@ -50,12 +50,22 @@ gravar `result.txt`, quando:
 - `customer.txt` tem formato inválido (linhas com quantidades diferentes de
   números, texto, números negativos ou arquivo vazio);
 - alguma linha de `commands.txt` é inválida (comando desconhecido, cliente
-  inexistente, valores faltando, sobrando ou negativos). Todos os comandos
-  são verificados antes de qualquer um ser executado.
+  inexistente, valores faltando, sobrando ou negativos);
+- um `RL` devolve mais do que o cliente tem alocado naquele ponto.
 
-Um `RL` que devolve mais do que o cliente tem não encerra o programa: ele é
-ignorado, uma mensagem de erro aparece na tela (stderr) e nada é escrito no
-`result.txt` para esse comando.
+Todos os comandos são verificados antes de qualquer um ser executado.
+
+## Sistema operacional e testes
+
+Implementado e testado em macOS (compilador `gcc`, que no Mac é o clang da
+Apple). O código usa só a biblioteca padrão de C, então deve compilar também
+em Linux e Unix.
+
+Para testar, copie `customer.txt` e `commands.txt` para a pasta, rode
+`make` e `./banker 10 5 7`, e compare o `result.txt` gerado com o esperado
+(`diff result.txt <result.txt esperado>`). Para ver os erros, altere os
+arquivos de entrada ou os argumentos, por exemplo `./banker 10 5` ou
+`./banker a b c`.
 
 ## Estrutura
 
