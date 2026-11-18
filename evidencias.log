@@ -321,3 +321,25 @@ exit
 
 Command exit status: 0
 Script done on Sat Nov 14 11:11:31 2026
+Wed Nov 18 09:39:51 -03 2026
+murilo
+/Users/murilo/dev/college/infra-so/cmocf-deadlock
+Script started on Wed Nov 18 09:39:51 2026
+Command: bash
+
+The default interactive shell is now zsh.
+To update your account to use zsh, please run `chsh -s /bin/zsh`.
+For more details, please visit https://support.apple.com/kb/HT208050.
+[?1034hbash-3.2$ ms[Kake clena[K[Kan
+rm -f main.o banker.o parser.o banker
+bash-3.2$ make
+gcc -Wall -Wextra -std=c99 -c main.c -o main.o
+gcc -Wall -Wextra -std=c99 -c banker.c -o banker.o
+gcc -Wall -Wextra -std=c99 -c parser.c -o parser.o
+gcc -Wall -Wextra -std=c99 -o banker main.o banker.o parser.o
+bash-3.2$ ..[K/banker 10 5 7
+bash-3.2$ diff [K[K[K[K[Kexit
+exit
+
+Command exit status: 0
+Script done on Wed Nov 18 09:41:06 2026
