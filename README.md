@@ -53,6 +53,10 @@ gravar `result.txt`, quando:
   inexistente, valores faltando, sobrando ou negativos). Todos os comandos
   são verificados antes de qualquer um ser executado.
 
+Um `RL` que devolve mais do que o cliente tem não encerra o programa: ele é
+ignorado, uma mensagem de erro aparece na tela (stderr) e nada é escrito no
+`result.txt` para esse comando.
+
 ## Estrutura
 
 | Arquivo | Conteúdo |
