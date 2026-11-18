@@ -25,16 +25,37 @@ static void print_values(FILE *out, const int *values, int n) {
     fprintf(out, j == 0 ? "%d" : " %d", values[j]);
 }
 
-// checks the format of every command before any of them is run
+// checks all commands before any of them is run: the format of each line
+// (parser) and releases bigger than what the customer holds. To know that, the
+// commands are tried on a throwaway bank, so the real one stays untouched.
 // prints the error and returns 0 = ok | -1 = error
 static int check_commands(FILE *file, int customers, int resources,
-                          int *values) {
+                          const int *total, const int *maximum, int *values) {
+  Bank trial;
+  if (bank_init(&trial, customers, resources, total, maximum) != 0) {
+    fprintf(stderr, "error: out of memory\n");
+    return -1;
+  }
+
   Command cmd;
   int status;
   int number = 0; // which command we are checking, for the error message
   while ((status = parse_command(file, customers, resources, &cmd, values)) ==
-         1)
+         1) {
     number++;
+    if (cmd.type == CMD_REQUEST) {
+      bank_request(&trial, cmd.customer, values);
+    } else if (cmd.type == CMD_RELEASE &&
+               bank_release(&trial, cmd.customer, values) != REL_OK) {
+      fprintf(stderr,
+              "error: invalid command %d in commands.txt: customer %d "
+              "releases more than it holds\n",
+              number, cmd.customer);
+      bank_free(&trial);
+      return -1;
+    }
+  }
+  bank_free(&trial);
 
   if (status < 0) {
     fprintf(stderr, "error: invalid command %d in commands.txt\n", number + 1);
@@ -111,7 +132,8 @@ int main(int argc, char *argv[]) {
 
   // check every command before running any (nothing is written on error)
   Command cmd;
-  if (check_commands(commands, customers, resources, values) != 0) {
+  if (check_commands(commands, customers, resources, total, maximum, values) !=
+      0) {
     fclose(commands);
     bank_free(&bank);
     free(maximum);
@@ -159,18 +181,11 @@ int main(int argc, char *argv[]) {
           fprintf(out, " was denied because exceed its maximum allocation\n");
       }
 
-    } else { // CMD_RELEASE
-      if (bank_release(&bank, cmd.customer, values) == REL_OK) {
-        fprintf(out, "Release from customer %d the resources ", cmd.customer);
-        print_values(out, values, resources);
-        fprintf(out, "\n");
-      } else {
-        // the PDF defines no message for this: keep result.txt clean and
-        // report it as an error instead
-        fprintf(stderr, "error: customer %d cannot release more than it holds, "
-                        "command ignored\n",
-                cmd.customer);
-      }
+    } else { // CMD_RELEASE (check_commands already made sure it works)
+      bank_release(&bank, cmd.customer, values);
+      fprintf(out, "Release from customer %d the resources ", cmd.customer);
+      print_values(out, values, resources);
+      fprintf(out, "\n");
     }
   }
 
