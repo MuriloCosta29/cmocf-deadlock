@@ -25,6 +25,24 @@ static void print_values(FILE *out, const int *values, int n) {
     fprintf(out, j == 0 ? "%d" : " %d", values[j]);
 }
 
+// checks the format of every command before any of them is run
+// prints the error and returns 0 = ok | -1 = error
+static int check_commands(FILE *file, int customers, int resources,
+                          int *values) {
+  Command cmd;
+  int status;
+  int number = 0; // which command we are checking, for the error message
+  while ((status = parse_command(file, customers, resources, &cmd, values)) ==
+         1)
+    number++;
+
+  if (status < 0) {
+    fprintf(stderr, "error: invalid command %d in commands.txt\n", number + 1);
+    return -1;
+  }
+  return 0;
+}
+
 int main(int argc, char *argv[]) {
   // customer.txt first: it tells how many resources the arguments must have
   int customers, resources;
@@ -91,15 +109,9 @@ int main(int argc, char *argv[]) {
     return 1;
   }
 
-  // validate every command before running any (nothing is written on error)
+  // check every command before running any (nothing is written on error)
   Command cmd;
-  int status;
-  int number = 0; // which command we are checking, for the error message
-  while ((status =
-              parse_command(commands, customers, resources, &cmd, values)) == 1)
-    number++;
-  if (status < 0) {
-    fprintf(stderr, "error: invalid command %d in commands.txt\n", number + 1);
+  if (check_commands(commands, customers, resources, values) != 0) {
     fclose(commands);
     bank_free(&bank);
     free(maximum);
@@ -153,9 +165,11 @@ int main(int argc, char *argv[]) {
         print_values(out, values, resources);
         fprintf(out, "\n");
       } else {
-        fprintf(out, "The customer %d release ", cmd.customer);
-        print_values(out, values, resources);
-        fprintf(out, " was denied because exceed its allocation\n");
+        // the PDF defines no message for this: keep result.txt clean and
+        // report it as an error instead
+        fprintf(stderr, "error: customer %d cannot release more than it holds, "
+                        "command ignored\n",
+                cmd.customer);
       }
     }
   }
